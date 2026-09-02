@@ -12,6 +12,10 @@ class MainController : public engine::core::Controller {
 
     void draw_woodswing();
 
+    void update_camera();
+
+    void update() override;
+
     void begin_draw() override;
 
     void draw() override;
