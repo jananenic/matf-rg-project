@@ -22,7 +22,7 @@ namespace app {
         auto gui_controller = engine::core::Controller::get<GuiController>();
         if(!gui_controller->is_enabled()) {
             auto camera = engine::core::Controller::get<engine::graphics::GraphicsController>()->camera();
-            camera->rotate_camera(position.dx*0.2,position.dy*0.2);
+            camera->rotate_camera(position.dx*0.4,position.dy*0.4);
         }
     }
 
@@ -57,7 +57,7 @@ namespace app {
         shader->set_mat4("projection", graphics->projection_matrix());
         shader->set_mat4("view", graphics->camera()->view_matrix());
         glm::mat4 model = glm::mat4(1.0f);
-        model = glm::translate(model, glm::vec3(0.0f, 0.0f, -3.0f));
+        model = glm::translate(model, glm::vec3(0.0f, -2.0f, -3.0f));
         model = glm::scale(model, glm::vec3(0.3f));
         shader->set_mat4("model", model);
         woodswing->draw(shader);
@@ -65,7 +65,7 @@ namespace app {
 
     void MainController::update_camera() {
         auto gui_controller = engine::core::Controller::get<GuiController>();
-        if(!gui_controller->is_enabled()) {
+        if(gui_controller->is_enabled()) {
             return;
         }
         auto platform = engine::core::Controller::get<engine::platform::PlatformController>();
@@ -84,6 +84,12 @@ namespace app {
         if(platform->key(engine::platform::KeyId::KEY_D).is_down()) {
             camera->move_camera(engine::graphics::Camera::Movement::RIGHT, dt);
         }
+        if(platform->key(engine::platform::KeyId::KEY_DOWN).is_down()) {
+            camera->move_camera(engine::graphics::Camera::Movement::DOWN, dt);
+        }
+        if(platform->key(engine::platform::KeyId::KEY_UP).is_down()) {
+            camera->move_camera(engine::graphics::Camera::Movement::UP, dt);
+        }
     }
 
     void MainController::update() {
@@ -95,8 +101,17 @@ namespace app {
 
     }
 
+    void MainController::draw_skybox() {
+        auto resources = engine::core::Controller::get<engine::resources::ResourcesController>();
+        auto skybox =  resources->skybox("skyboxNight");
+        auto shader = resources->shader("skybox");
+        auto graphics = engine::core::Controller::get<engine::graphics::GraphicsController>();
+        graphics->draw_skybox(shader, skybox);
+    }
+
     void MainController::draw() {
         draw_woodswing();
+        draw_skybox();
     }
 
     void MainController::end_draw() {
