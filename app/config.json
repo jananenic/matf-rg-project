@@ -1,6 +1,9 @@
 {
   "resources": {
     "models": {
+      "woodswing" : {
+        "path" : "woodswing/woodswing.obj"
+      }
     }
   },
   "window": {
