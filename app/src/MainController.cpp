@@ -44,11 +44,11 @@ namespace app {
         return true;
     }
 
-    void MainController::draw_woodswing() {
+    void MainController::draw_castle() {
         //model
         auto resources = engine::core::Controller::get<engine::resources::ResourcesController>();
         auto graphics = engine::core::Controller::get<engine::graphics::GraphicsController>();
-        engine::resources::Model* woodswing = resources->model("woodswing");
+        engine::resources::Model* castle = resources->model("castle");
 
         //shader
         engine::resources::Shader* shader = resources->shader("basic");
@@ -58,9 +58,10 @@ namespace app {
         shader->set_mat4("view", graphics->camera()->view_matrix());
         glm::mat4 model = glm::mat4(1.0f);
         model = glm::translate(model, glm::vec3(0.0f, -2.0f, -3.0f));
-        model = glm::scale(model, glm::vec3(0.3f));
+        model = glm::rotate(model,glm::radians(-90.0f),glm::vec3(1.0,0.0,0.0));
+        model = glm::scale(model, glm::vec3(0.05f));
         shader->set_mat4("model", model);
-        woodswing->draw(shader);
+        castle->draw(shader);
     }
 
     void MainController::update_camera() {
@@ -110,7 +111,7 @@ namespace app {
     }
 
     void MainController::draw() {
-        draw_woodswing();
+        draw_castle();
         draw_skybox();
     }
 

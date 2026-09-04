@@ -10,7 +10,7 @@ class MainController : public engine::core::Controller {
 
     bool loop() override;
 
-    void draw_woodswing();
+    void draw_castle();
 
     void update_camera();
 
