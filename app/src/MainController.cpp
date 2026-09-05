@@ -57,9 +57,9 @@ namespace app {
         shader->set_mat4("projection", graphics->projection_matrix());
         shader->set_mat4("view", graphics->camera()->view_matrix());
         glm::mat4 model = glm::mat4(1.0f);
-        model = glm::translate(model, glm::vec3(0.0f, -2.0f, -3.0f));
+        model = glm::translate(model, glm::vec3(0.0f, -2.0f, -10.0f));
         model = glm::rotate(model,glm::radians(-90.0f),glm::vec3(1.0,0.0,0.0));
-        model = glm::scale(model, glm::vec3(0.05f));
+        model = glm::scale(model, glm::vec3(0.2f));
         shader->set_mat4("model", model);
         castle->draw(shader);
     }
@@ -104,7 +104,7 @@ namespace app {
 
     void MainController::draw_skybox() {
         auto resources = engine::core::Controller::get<engine::resources::ResourcesController>();
-        auto skybox =  resources->skybox("skyboxNight");
+        auto skybox =  resources->skybox("skybox_night");
         auto shader = resources->shader("skybox");
         auto graphics = engine::core::Controller::get<engine::graphics::GraphicsController>();
         graphics->draw_skybox(shader, skybox);
