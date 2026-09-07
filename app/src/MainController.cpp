@@ -13,6 +13,12 @@
 #include <engine/resources/ResourcesController.hpp>
 #include <spdlog/spdlog.h>
 
+
+float angle = 0.0f;
+bool fast = false;
+float speed = 1.0f;
+float timer ;
+bool timer_started;
 namespace app {
 
     class MainPlatformEventObserver : public engine::platform::PlatformEventObserver {
@@ -114,6 +120,22 @@ namespace app {
 
         //auto platform = engine::core::Controller::get<engine::platform::PlatformController>();
         if (platform->key(engine::platform::KEY_L).state() == engine::platform::Key::State::JustPressed) { lamps_enabled = !lamps_enabled; }
+        if(platform->key(engine::platform::KEY_V).state() == engine::platform::Key::State::JustPressed) {
+            timer_started = true;
+            timer = 0.0f;
+            //fast = true;
+        }
+        if(timer_started) {
+            timer+=dt;
+            if(timer >= 2.0f && timer < 7.0f) {
+                fast = true;
+            }
+            if(timer >= 7.0f) {
+                fast = false;
+                timer_started = false;
+            }
+        }
+
     }
 
     void MainController::begin_draw() {
