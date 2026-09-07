@@ -9,6 +9,9 @@
       },
       "lamp" : {
         "path" : "lamp/Lamp Old Street.obj"
+      },
+      "da_vinci" : {
+        "path" : "da_vincis_flying_machine/scene.gltf"
       }
     }
   },

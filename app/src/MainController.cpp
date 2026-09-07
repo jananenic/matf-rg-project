@@ -58,6 +58,16 @@ namespace app {
         shader->use();
         shader->set_mat4("projection", graphics->projection_matrix());
         shader->set_mat4("view", graphics->camera()->view_matrix());
+
+
+        shader->set_vec3("viewPos", graphics->camera()->Position);
+        shader->set_float("material.ambient", 0.3f);
+
+        shader->set_vec3("dirLight.direction", glm::vec3(0.7f, 1.0f, 0.3f));
+        shader->set_vec3("dirLight.ambient", glm::vec3(0.7f, 0.6f, 0.6f));
+        shader->set_vec3("dirLight.diffuse", glm::vec3(1.0f, 1.0f, 1.0f));
+        shader->set_vec3("dirLight.specular", glm::vec3(1.0f, 1.0f, 1.0f));
+
         glm::mat4 model = glm::mat4(1.0f);
         model = glm::translate(model, glm::vec3(0.0f, -2.0f, -10.0f));
         model = glm::rotate(model,glm::radians(-90.0f),glm::vec3(1.0,0.0,0.0));
@@ -98,6 +108,12 @@ namespace app {
 
     void MainController::update() {
         update_camera();
+        auto platform = engine::core::Controller::get<engine::platform::PlatformController>();
+        float dt = platform->dt();
+        angle += dt;
+
+        //auto platform = engine::core::Controller::get<engine::platform::PlatformController>();
+        if (platform->key(engine::platform::KEY_L).state() == engine::platform::Key::State::JustPressed) { lamps_enabled = !lamps_enabled; }
     }
 
     void MainController::begin_draw() {
@@ -211,6 +227,7 @@ namespace app {
         draw_castle();
         draw_grass();
         draw_lamps();
+        draw_davinci();
         draw_skybox();
     }
 
