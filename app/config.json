@@ -3,6 +3,12 @@
     "models": {
       "castle" : {
         "path" : "castle/scene.gltf"
+      },
+      "grass" : {
+        "path" : "grass/grass.obj"
+      },
+      "lamp" : {
+        "path" : "lamp/Lamp Old Street.obj"
       }
     }
   },
