@@ -249,7 +249,7 @@ namespace app {
         draw_castle();
         draw_grass();
         draw_lamps();
-        draw_davinci();
+        //draw_davinci();
         draw_skybox();
     }
 
