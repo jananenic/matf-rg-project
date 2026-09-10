@@ -250,6 +250,7 @@ namespace app {
         draw_grass();
         draw_lamps();
         draw_davinci();
+
         draw_skybox();
     }
 
