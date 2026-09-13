@@ -14,11 +14,7 @@
 #include <spdlog/spdlog.h>
 
 
-float angle = 0.0f;
-bool fast = false;
-float speed = 1.0f;
-float timer ;
-bool timer_started;
+
 namespace app {
 
     class MainPlatformEventObserver : public engine::platform::PlatformEventObserver {
@@ -123,15 +119,15 @@ namespace app {
         if(platform->key(engine::platform::KEY_V).state() == engine::platform::Key::State::JustPressed) {
             timer_started = true;
             timer = 0.0f;
-            //fast = true;
+
         }
         if(timer_started) {
             timer+=dt;
-            if(timer >= 2.0f && timer < 7.0f) {
-                fast = true;
+            if(timer >= 2.0f && timer < 8.0f) {
+                da_vinci_enabled = true;
             }
-            if(timer >= 7.0f) {
-                fast = false;
+            if(timer >= 8.0f) {
+                da_vinci_enabled = false;
                 timer_started = false;
             }
         }
@@ -243,6 +239,38 @@ namespace app {
 
 
 
+    }
+
+    void MainController::draw_davinci() {
+        if (!da_vinci_enabled) return;
+        auto resources = engine::core::Controller::get<engine::resources::ResourcesController>();
+        auto graphics = engine::core::Controller::get<engine::graphics::GraphicsController>();
+        engine::resources::Model* da_vinci = resources->model("da_vinci");
+
+        //shader
+        engine::resources::Shader* shader = resources->shader("light");
+
+        shader->use();
+        shader->set_mat4("projection", graphics->projection_matrix());
+        shader->set_mat4("view", graphics->camera()->view_matrix());
+
+        shader->set_vec3("viewPos", graphics->camera()->Position);
+        shader->set_float("material.ambient", 0.3f);
+
+        shader->set_vec3("dirLight.direction", glm::vec3(0.7f, 1.0f, 0.3f));
+        shader->set_vec3("dirLight.ambient", glm::vec3(0.5f, 0.5f, 0.5f));
+        shader->set_vec3("dirLight.diffuse", glm::vec3(1.0f, 1.0f, 1.0f));
+        shader->set_vec3("dirLight.specular", glm::vec3(1.0f, 1.0f, 1.0f));
+
+        glm::mat4 model = glm::mat4(1.0f);
+        model = glm::translate(model, glm::vec3(-0.35,1.50,-10.0));
+        //radius*cos, angle/rad, radius*sin
+        model = glm::translate(model, glm::vec3(cos(angle)*radius, 0, sin(angle)*radius));
+        model = glm::rotate(model,glm::radians(90.0f),glm::vec3(0.0,1.0,0));
+        model = glm::rotate(model,-angle,glm::vec3(0.0,1.0,0));
+        model = glm::scale(model, glm::vec3(0.03f));
+        shader->set_mat4("model", model);
+        da_vinci->draw(shader);
     }
 
     void MainController::draw() {

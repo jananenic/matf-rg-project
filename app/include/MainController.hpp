@@ -46,6 +46,13 @@ class MainController : public engine::core::Controller {
 
     void end_draw() override;
 
+    float angle = 0.0f;
+    bool da_vinci_enabled = false;
+    float speed = 1.0f;
+    float timer ;
+    float radius = 4.0f;
+    bool timer_started;
+
 public:
     std::string_view name() const override {
         return "app::MainController";
