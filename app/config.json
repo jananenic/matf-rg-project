@@ -1,11 +1,23 @@
 {
   "resources": {
     "models": {
+      "castle" : {
+        "path" : "castle/scene.gltf"
+      },
+      "grass" : {
+        "path" : "grass/grass.obj"
+      },
+      "lamp" : {
+        "path" : "lamp/Lamp Old Street.obj"
+      },
+      "da_vinci" : {
+        "path" : "da_vincis_flying_machine/scene.gltf"
+      }
     }
   },
   "window": {
-    "height": 600,
+    "height": 1200,
     "title": "Hello, window!",
-    "width": 800
+    "width": 1600
   }
 }
