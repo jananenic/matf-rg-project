@@ -26,6 +26,7 @@ uniform bool grayscale_enabled;
 void main() {
     FragColor = texture(screen_texture, TexCoords);
     float average = 0.2126 * FragColor.r + 0.7152 * FragColor.g + 0.0722 * FragColor.b;
+    //float average = 0.299 * FragColor.r + 0.587 * FragColor.g + 0.144 * FragColor.b;
     vec4 grayFragColor = vec4(average, average, average, 1.0);
     FragColor = grayscale_enabled ? grayFragColor : FragColor;
 

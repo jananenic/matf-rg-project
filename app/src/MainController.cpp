@@ -10,8 +10,10 @@
 #include <engine/graphics/GraphicsController.hpp>
 #include <engine/graphics/OpenGL.hpp>
 #include <engine/platform/PlatformController.hpp>
+#include <engine/graphics/PointShadows.hpp>
 #include <engine/resources/ResourcesController.hpp>
 #include <spdlog/spdlog.h>
+
 
 
 
@@ -35,7 +37,6 @@ namespace app {
         auto platform = engine::core::Controller::get<engine::platform::PlatformController>();
         platform->register_platform_event_observer(std::make_unique<MainPlatformEventObserver>());
         engine::graphics::OpenGL::enable_depth_testing();
-
         //spdlog::info("MainController initialized");
 
     }
@@ -51,24 +52,11 @@ namespace app {
     void MainController::draw_castle() {
         //model
         auto resources = engine::core::Controller::get<engine::resources::ResourcesController>();
-        auto graphics = engine::core::Controller::get<engine::graphics::GraphicsController>();
         engine::resources::Model* castle = resources->model("castle");
 
         //shader
         engine::resources::Shader* shader = resources->shader("light");
-
-        shader->use();
-        shader->set_mat4("projection", graphics->projection_matrix());
-        shader->set_mat4("view", graphics->camera()->view_matrix());
-
-
-        shader->set_vec3("viewPos", graphics->camera()->Position);
-        shader->set_float("material.ambient", 0.3f);
-
-        shader->set_vec3("dirLight.direction", glm::vec3(0.7f, 1.0f, 0.3f));
-        shader->set_vec3("dirLight.ambient", glm::vec3(0.7f, 0.6f, 0.6f));
-        shader->set_vec3("dirLight.diffuse", glm::vec3(1.0f, 1.0f, 1.0f));
-        shader->set_vec3("dirLight.specular", glm::vec3(1.0f, 1.0f, 1.0f));
+        set_shader_uniforms(shader);
 
         glm::mat4 model = glm::mat4(1.0f);
         model = glm::translate(model, glm::vec3(0.0f, -2.0f, -10.0f));
@@ -139,6 +127,39 @@ namespace app {
 
     }
 
+    void MainController::set_shader_uniforms(engine::resources::Shader* shader) {
+
+        auto graphics = engine::core::Controller::get<engine::graphics::GraphicsController>();
+
+        shader->use();
+        shader->set_mat4("projection", graphics->projection_matrix());
+        shader->set_mat4("view", graphics->camera()->view_matrix());
+        shader->set_vec3("viewPos", graphics->camera()->Position);
+
+
+        shader->set_vec3("dirLight.direction",dir_direction );//
+        shader->set_vec3("dirLight.ambient", dir_ambient);//
+        shader->set_vec3("dirLight.diffuse", dir_diffuse);//
+        shader->set_vec3("dirLight.specular", dir_specular);//
+
+        shader->set_vec3( "pointPos", lamp_positions[0]);
+        shader->set_float("constant", 1.0f);
+        shader->set_float( "linear", 0.09f);
+        shader->set_float("quadratic", 0.6f);
+        shader->set_vec3("ambientP", lamp_color * 0.05f * lamp_strength);
+        shader->set_vec3( "diffuseP", lamp_color * lamp_strength);
+        shader->set_vec3( "specularP", lamp_color * 0.15f * lamp_strength);
+        shader->set_bool("light_enabled", lamps_enabled);
+
+
+        shader->set_int("depthMap", 10);
+        graphics->point_shadow()->bind_depth_map(10);
+        shader->set_vec3("lightPos", lightPos);
+        shader->set_float("far_plane", graphics->point_shadow()->far_plane());
+        shader->set_bool("shadows",lamps_enabled);
+
+    }
+
     void MainController::draw_skybox() {
         auto resources = engine::core::Controller::get<engine::resources::ResourcesController>();
         auto skybox =  resources->skybox("skybox_night");
@@ -149,29 +170,11 @@ namespace app {
 
     void MainController::draw_grass() {
         auto resources = engine::core::Controller::get<engine::resources::ResourcesController>();
-        auto graphics = engine::core::Controller::get<engine::graphics::GraphicsController>();
         engine::resources::Model* grass = resources->model("grass");
 
         //shader
         engine::resources::Shader* shader = resources->shader("light");
-
-        shader->use();
-        shader->set_mat4("projection", graphics->projection_matrix());
-        shader->set_mat4("view", graphics->camera()->view_matrix());
-
-        shader->set_vec3("viewPos", graphics->camera()->Position);
-        shader->set_float("material.ambient", 0.3f);
-        /*
-        shader->set_float("material.ambient", 2.3f);
-        shader->set_float("material.diffuse", 1.0f);
-        shader->set_float("material.specular", 0.0f);
-        shader->set_float("material.shininess", 2.0f);
-        */
-        shader->set_vec3("dirLight.direction", glm::vec3(0.7f, 1.0f, 0.3f));
-        shader->set_vec3("dirLight.ambient", glm::vec3(0.5f, 0.5f, 0.5f));
-        shader->set_vec3("dirLight.diffuse", glm::vec3(1.0f, 1.0f, 1.0f));
-        shader->set_vec3("dirLight.specular", glm::vec3(1.0f, 1.0f, 1.0f));
-
+        set_shader_uniforms(shader);
         glm::mat4 model = glm::mat4(1.0f);
         model = glm::translate(model, glm::vec3(0.0f, -4.45f, -10.0f));
         model = glm::rotate(model,glm::radians(-90.0f),glm::vec3(1.0,0.0,0.0));
@@ -183,41 +186,10 @@ namespace app {
 
     void MainController::draw_lamp(glm::vec3 move, float angle) {
         auto resources = engine::core::Controller::get<engine::resources::ResourcesController>();
-        auto graphics = engine::core::Controller::get<engine::graphics::GraphicsController>();
         engine::resources::Model* lamp = resources->model("lamp");
-
         //shader
         engine::resources::Shader* shader = resources->shader("light");
-
-        shader->use();
-        shader->set_mat4("projection", graphics->projection_matrix());
-        shader->set_mat4("view", graphics->camera()->view_matrix());
-
-        shader->set_vec3("viewPos", graphics->camera()->Position);
-        shader->set_float("material.ambient", 0.3f);
-
-        shader->set_vec3("dirLight.direction", glm::vec3(0.7f, 1.0f, 0.3f));
-        shader->set_vec3("dirLight.ambient", glm::vec3(0.5f, 0.5f, 0.5f));
-        shader->set_vec3("dirLight.diffuse", glm::vec3(1.0f, 1.0f, 1.0f));
-        shader->set_vec3("dirLight.specular", glm::vec3(1.0f, 1.0f, 1.0f));
-
-
-        for(int i = 0; i < lamp_positions.size(); i++) {
-            std::string uniform = "pointLights[" + std::to_string(i) + "].";
-            shader->set_vec3(uniform + "position", lamp_positions[i]);
-            shader->set_float(uniform + "constant", 1.0f);
-            shader->set_float(uniform + "linear", 0.09f);
-            shader->set_float(uniform +"quadratic", 0.6f);
-            shader->set_vec3(uniform + "ambient", lamp_color * 0.05f * lamp_strength);
-            shader->set_vec3(uniform + "diffuse", lamp_color * lamp_strength);
-            shader->set_vec3(uniform + "specular", lamp_color * 0.15f * lamp_strength);
-            if(lamps_enabled) {
-                shader->set_bool("light_enabled", true);
-            }
-            else {
-                shader->set_bool(  "light_enabled", false);
-            }
-        }
+        set_shader_uniforms(shader);
 
         glm::mat4 model = glm::mat4(1.0f);
         model = glm::translate(model, move);
@@ -239,28 +211,17 @@ namespace app {
 
 
 
+
     }
 
     void MainController::draw_davinci() {
         if (!da_vinci_enabled) return;
         auto resources = engine::core::Controller::get<engine::resources::ResourcesController>();
-        auto graphics = engine::core::Controller::get<engine::graphics::GraphicsController>();
         engine::resources::Model* da_vinci = resources->model("da_vinci");
 
         //shader
         engine::resources::Shader* shader = resources->shader("light");
-
-        shader->use();
-        shader->set_mat4("projection", graphics->projection_matrix());
-        shader->set_mat4("view", graphics->camera()->view_matrix());
-
-        shader->set_vec3("viewPos", graphics->camera()->Position);
-        shader->set_float("material.ambient", 0.3f);
-
-        shader->set_vec3("dirLight.direction", glm::vec3(0.7f, 1.0f, 0.3f));
-        shader->set_vec3("dirLight.ambient", glm::vec3(0.5f, 0.5f, 0.5f));
-        shader->set_vec3("dirLight.diffuse", glm::vec3(1.0f, 1.0f, 1.0f));
-        shader->set_vec3("dirLight.specular", glm::vec3(1.0f, 1.0f, 1.0f));
+        set_shader_uniforms(shader);
 
         glm::mat4 model = glm::mat4(1.0f);
         model = glm::translate(model, glm::vec3(-0.35,1.50,-10.0));
@@ -273,7 +234,61 @@ namespace app {
         da_vinci->draw(shader);
     }
 
+    void MainController::render_depth(engine::resources::Shader *shader) {
+        auto resources = engine::core::Controller::get<engine::resources::ResourcesController>();
+
+        shader->use();
+        //grass
+        glm::mat4 model = glm::mat4(1.0f);
+        model = glm::translate(model, glm::vec3(0.0f, -4.45f, -10.0f));
+        model = glm::rotate(model,glm::radians(-90.0f),glm::vec3(1.0,0.0,0.0));
+        model = glm::scale(model, glm::vec3(0.3f));
+        shader->set_mat4("model", model);
+        resources->model("grass")->draw(shader);
+
+        //castle
+        model = glm::mat4(1.0f);
+        model = glm::translate(model, glm::vec3(0.0f, -2.0f, -10.0f));
+        model = glm::rotate(model,glm::radians(-90.0f),glm::vec3(1.0,0.0,0.0));
+        model = glm::rotate(model,glm::radians(-90.0f),glm::vec3(0.0,0.0,1.0));
+        model = glm::scale(model, glm::vec3(0.2f));
+        shader->set_mat4("model", model);
+        resources->model("castle")->draw(shader);
+
+        //lamp
+        model = glm::mat4(1.0f);
+        model = glm::translate(model, lamp_positions[0]);
+        model = glm::rotate(model,glm::radians(-90.0f),glm::vec3(0.0,1.0,0.0));
+        model = glm::scale(model, glm::vec3(0.03f));
+        shader->set_mat4("model", model);
+
+        model = glm::mat4(1.0f);
+        model = glm::translate(model, lamp_positions[1]);
+        model = glm::rotate(model,glm::radians(90.0f),glm::vec3(0.0,1.0,0.0));
+        model = glm::scale(model, glm::vec3(0.03f));
+        shader->set_mat4("model", model);
+
+
+
+    }
+
     void MainController::draw() {
+
+        auto resources = engine::core::Controller::get<engine::resources::ResourcesController>();
+        auto graphics = engine::core::Controller::get<engine::graphics::GraphicsController>();
+        auto platform = engine::core::Controller::get<engine::platform::PlatformController>();
+
+        auto depthShader = resources->shader("point_shadows");
+        if(depthShader) {
+            graphics->point_shadow()->begin(lightPos, depthShader);
+            render_depth(depthShader);
+            int screenWidth = platform->window()->width();
+            int screenHeight = platform->window()->height();
+            graphics->point_shadow()->end(screenWidth, screenHeight);
+
+
+        }
+
         draw_castle();
         draw_grass();
         draw_lamps();

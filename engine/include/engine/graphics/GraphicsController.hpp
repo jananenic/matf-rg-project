@@ -8,6 +8,7 @@
 
 #include <engine/core/Controller.hpp>
 #include <engine/graphics/Camera.hpp>
+#include <engine/graphics/PointShadows.hpp>
 #include <engine/platform/PlatformEventObserver.hpp>
 
 struct ImGuiContext;
@@ -58,6 +59,10 @@ class GraphicsController final : public core::Controller {
 public:
     std::string_view name() const override;
 
+
+    PointShadows* point_shadow() {
+        return &m_point_shadows;
+    }
     /**
     * @brief Calls internal methods for the beginning of gui drawing. Should be called in pair with @ref GraphicsController::end_gui.
     *
@@ -167,6 +172,8 @@ private:
     glm::mat4 m_projection_matrix{};
     Camera m_camera{};
     ImGuiContext *m_imgui_context{};
+
+    PointShadows m_point_shadows;
 };
 
 /**
