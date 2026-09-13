@@ -24,7 +24,7 @@ void main(){
 #version 330 core
 
 out vec4 FragColor;
-#define BR 2
+
 struct Material {
     sampler2D tex;
     float ambient;
@@ -58,14 +58,12 @@ in vec3 Normal;
 in vec2 TexCoords;
 
 uniform vec3 viewPos;
-uniform Material material;
+//uniform Material material;
 uniform DirLight dirLight;
 uniform sampler2D texture_diffuse1;
-uniform PointLight pointLights[BR];
+uniform PointLight pointLights[2];
 
 uniform bool light_enabled;
-
-//vec3 CalcPointLight(PointLight light, vec3 normal, vec3 fragPos, vec3 viewDir, vec3 color);
 
 vec3 CalcDirLight(DirLight light, vec3 normal, vec3 viewDir, vec3 color) {
     vec3 lightDir = normalize(-light.direction);
@@ -94,7 +92,7 @@ vec3 CalcPointLight(PointLight light, vec3 normal, vec3 fragPos, vec3 viewDir, v
     float attenuation = 1.0 / (light.constant + light.linear * distance + light.quadratic * (distance * distance));
 
     vec3 ambient = light.ambient * color;
-    vec3 diffuse = light.diffuse * diff *color;
+    vec3 diffuse = light.diffuse * diff * color;
     vec3 specular = light.specular * spec;
 
     ambient *= attenuation;
@@ -112,9 +110,8 @@ void main()
     vec3 result = CalcDirLight(dirLight,norm, viewDir, color);
 
     if(light_enabled){
-        for(int i = 0; i < BR; i++) {
-            result += CalcPointLight(pointLights[i], norm, FragPos, viewDir, color);
-        }
+        for(int i = 0; i < 2; i++)
+           result += CalcPointLight(pointLights[i], norm, FragPos, viewDir, color);
     }
     FragColor = vec4(result, 1.0);
 }
