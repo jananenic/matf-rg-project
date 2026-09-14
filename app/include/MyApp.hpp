@@ -8,11 +8,10 @@
 
 namespace app {
 
-class MyApp : public engine::core::App{
+class MyApp : public engine::core::App {
     void app_setup() override;
-
 };
 
-} // app
+}// namespace app
 
-#endif //MYAPP_HPP
+#endif//MYAPP_HPP

@@ -8,19 +8,18 @@
 
 namespace app {
 
-class GrayscaleController : public engine::graphics::PostProcessingController{
+class GrayscaleController : public engine::graphics::PostProcessingController {
 public:
-    std::string_view name() const override {
-        return "app::GrayscaleController";
-    }
+    std::string_view name() const override { return "app::GrayscaleController"; }
+
 private:
     void poll_events() override;
+
     void draw() override;
 
-    bool grayscale_enabled = false;
-
+    bool m_grayscale_enabled = false;
 };
 
-} // engine
+}// namespace app
 
-#endif //GRAYSCALECONROLLER_HPP
+#endif//GRAYSCALECONROLLER_HPP

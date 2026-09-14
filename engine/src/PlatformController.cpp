@@ -236,7 +236,7 @@ void PlatformController::set_enable_cursor(bool enabled) {
 }
 
 void initialize_key_maps() {
-    // clang-format off
+// clang-format off
     #include "engine_key_to_string.include"
     #include "glfw_key_mapping.include"
     // clang-format on

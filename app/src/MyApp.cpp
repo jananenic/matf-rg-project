@@ -18,6 +18,5 @@ void MyApp::app_setup() {
     main_controller->after(engine::core::Controller::get<engine::core::EngineControllersEnd>());
     grayscale_controller->after(main_controller);
     grayscale_controller->before(gui_controller);
-
 }
-} // app
+}// namespace app

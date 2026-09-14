@@ -10,7 +10,6 @@
 
 #include <engine/core/Controller.hpp>
 
-
 #include <engine/platform/Input.hpp>
 #include <engine/platform/PlatformController.hpp>
 #include <engine/platform/Window.hpp>

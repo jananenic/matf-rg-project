@@ -10,9 +10,7 @@ namespace app {
 
 class GuiController : public engine::core::Controller {
 public:
-    std::string_view name() const override {
-        return "app::GUIController";
-    }
+    std::string_view name() const override { return "app::GUIController"; }
 
 private:
     void initialize() override;
@@ -22,6 +20,6 @@ private:
     void draw() override;
 };
 
-}// app
+}// namespace app
 
-#endif //GUICONTROLLER_HPP
+#endif//GUICONTROLLER_HPP
