@@ -1,26 +1,31 @@
 # {NAME-OF-THE-PROJECT}
 
-{INDEX} - {STUDENT-FULL-NAME}  
+mi23106 - Jana Nenic
 {PROJECT DESCRIPTION}
 
 ## Controls
 
-{BUTTON1} -> {ACTION1}  
-{BUTTON2} -> {ACTION2}  
-...  
-{BUTTONN} -> {ACTIONN}
+Press W -> Camera moves foreward  
+Press S -> Camera moves backward
+Press A -> Camera moves left
+Press D -> Camera moves right
+Press L -> Turn the lights on and off
+Press G -> Instructions appear
+Press F -> da Vinci's flying machine appears
+Press C -> Activate grayscale
+Move the mouse -> Rotate camera
 
 ## Features
 
 ### Fundamental:
 
-[ ] Model with lighting
-[ ] Two types of lighting with customizable colors and movement through GUI or ACTIONS
-[ ] {ACTION_X} --- AFTER_M_SECONDS---Triggers---> {EVENT_A} ---> AFTER_N_SECONDS---Triggers---> {EVENT_B}
+[x] Model with lighting
+[x] Two types of lighting with customizable colors and movement through GUI or ACTIONS
+[x] Press F --- AFTER 2 SECONDS------> da Vinci's flying machine appears ---> AFTER 6 SECONDS-----> da Vinci's flying machine dissappears
 
 ### Group A:
 
-[ ] Frame-buffers with post-processing   
+[x] Frame-buffers with post-processing   
 [ ] Off-screen Anti-Aliasing  
 [ ] Parallax Mapping
 [ ] Bloom with the use of HDR
@@ -36,12 +41,15 @@
 
 ## Models:
 
-[link1]   
-[link2]
+Castle  https://drive.google.com/drive/folders/1JaBvW-bSZ9XY2TLa8XVnLNVwsow-p7do?usp=drive_link
+Grass   https://drive.google.com/drive/folders/1mTlcB_8YX6nuKhMZMK25Rrh4_Mp3bjgf?usp=drive_link
+Da Vinci's flying machine https://drive.google.com/drive/folders/1LOB6BUb1xa7xRsVCTwtoRJfRZOqqcfcQ?usp=drive_link
+Knight https://drive.google.com/drive/folders/14XHX3ss82j-sjKZRFCQqbJLrFTHm5teE
+Lamp https://drive.google.com/drive/folders/1pw5AGaGU2ODKRFR0zK1n0bPD7to-aleY
 
-## Textures
+## Skybox:
+Skybox https://drive.google.com/drive/folders/1Gg80-Y1jAPTSsM0-lZI6ak4-5t7Fb5jM?usp=drive_link
 
-[link1]  
-[link2]
 
-{OTHER-RESOURCES}
+OTHER-RESOURCES
+learnopengl.com
