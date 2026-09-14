@@ -25,6 +25,8 @@ class MainController : public engine::core::Controller {
 
     void draw_lamps();
 
+    void draw_knight();
+
     void draw_davinci();
 
     void update_camera();

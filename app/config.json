@@ -12,6 +12,9 @@
       },
       "da_vinci" : {
         "path" : "da_vincis_flying_machine/scene.gltf"
+      },
+      "knight" : {
+        "path" : "knight/knight.obj"
       }
     }
   },

@@ -136,6 +136,10 @@ void MainController::draw_lamps() {
     draw_lamp(vec2, angle2);
 }
 
+void MainController::draw_knight() {
+    auto resources = engine::core::Controller::get<engine::resources::ResourcesController>();
+    auto graphics = engine::core::Controller::get<engine::graphics::GraphicsController>();
+    engine::resources::Model *statue = resources->model("knight");
 
 
     engine::resources::Shader *shader = resources->shader("light");
@@ -169,13 +173,6 @@ void MainController::draw_davinci() {
     da_vinci->draw(shader);
 }
 
-    void MainController::draw() {
-        draw_castle();
-        draw_grass();
-        draw_lamps();
-        draw_davinci();
-        draw_skybox();
-    }
 void MainController::update_camera() {
     auto gui_controller = engine::core::Controller::get<GuiController>();
     if (gui_controller->is_enabled()) { return; }
@@ -217,6 +214,7 @@ void MainController::draw() {
     draw_castle();
     draw_grass();
     draw_lamps();
+    draw_knight();
     draw_davinci();
     draw_skybox();
 }
