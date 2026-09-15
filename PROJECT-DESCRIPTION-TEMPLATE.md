@@ -69,5 +69,5 @@ Lamp https://drive.google.com/drive/folders/1pw5AGaGU2ODKRFR0zK1n0bPD7to-aleY
 Skybox https://drive.google.com/drive/folders/1Gg80-Y1jAPTSsM0-lZI6ak4-5t7Fb5jM?usp=drive_link
 
 
-OTHER-RESOURCES
+## Other resources:
 learnopengl.com
