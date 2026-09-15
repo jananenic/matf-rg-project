@@ -37,13 +37,18 @@ class MainController : public engine::core::Controller {
 
     void end_draw() override;
 
+public:
+    glm::vec3 lamp_color = glm::vec3(0.93f, 0.6f, 0.7f);
+
+
+
 
 private:
     std::vector<glm::vec3> m_lamp_positions = {
             glm::vec3(0.0f, -1.5f, -4.8f),
             glm::vec3(-0.52f, -1.5f, -4.8f)};
     glm::vec3 m_light_pos = (m_lamp_positions[0] + m_lamp_positions[1]) / glm::vec3(2);
-    glm::vec3 m_lamp_color = glm::vec3(0.93f, 0.6f, 0.7f);
+
     bool m_lamps_enabled = true;
     float m_lamp_strength = 1.0f;
     float m_angle = 0.0f;

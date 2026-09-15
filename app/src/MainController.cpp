@@ -61,9 +61,9 @@ void MainController::set_shader_uniforms(engine::resources::Shader *shader) {
     shader->set_float("constant", 1.0f);
     shader->set_float("linear", 0.09f);
     shader->set_float("quadratic", 0.6f);
-    shader->set_vec3("ambient", m_lamp_color * 0.05f * m_lamp_strength);
-    shader->set_vec3("diffuse", m_lamp_color * m_lamp_strength);
-    shader->set_vec3("specular", m_lamp_color * 0.15f * m_lamp_color);
+    shader->set_vec3("ambient", lamp_color * 0.05f * m_lamp_strength);
+    shader->set_vec3("diffuse", lamp_color * m_lamp_strength);
+    shader->set_vec3("specular", lamp_color * 0.15f * lamp_color);
     shader->set_bool("light_enabled", m_lamps_enabled);
 }
 
