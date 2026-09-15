@@ -1,4 +1,3 @@
-
 // clang-format off
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
@@ -57,9 +56,7 @@ void GraphicsPlatformEventObserver::on_window_resize(int width, int height) {
     CHECKED_GL_CALL(glViewport, 0, 0, width, height);
 }
 
-std::string_view GraphicsController::name() const {
-    return "GraphicsController";
-}
+std::string_view GraphicsController::name() const { return "GraphicsController"; }
 
 void GraphicsController::begin_gui() {
     ImGui_ImplOpenGL3_NewFrame();
