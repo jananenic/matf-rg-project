@@ -1,7 +1,7 @@
-# {NAME-OF-THE-PROJECT}
+# Keeper of the Castle
 
 mi23106 - Jana Nenic
-{PROJECT DESCRIPTION}
+Interactive 3D scene of a knight guarding the castle. The scene features lamps with adjustable light and da Vinci's flying machine circling around the castle.
 
 ## Controls
 
@@ -9,6 +9,8 @@ Press W -> Camera moves foreward
 Press S -> Camera moves backward
 Press A -> Camera moves left
 Press D -> Camera moves right
+Press Arrow Up -> Camera moves up
+Press Arrow Down -> Camera moves down
 Press L -> Turn the lights on and off
 Press G -> Instructions appear
 Press F -> da Vinci's flying machine appears

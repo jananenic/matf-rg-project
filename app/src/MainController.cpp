@@ -31,7 +31,6 @@ void MainController::initialize() {
     platform->register_platform_event_observer(std::make_unique<MainPlatformEventObserver>());
     engine::graphics::OpenGL::enable_depth_testing();
 
-    //spdlog::info("MainController initialized");
 }
 
 bool MainController::loop() {
@@ -164,11 +163,10 @@ void MainController::draw_davinci() {
 
     glm::mat4 model = glm::mat4(1.0f);
     model = glm::translate(model, glm::vec3(-0.35, 1.50, -10.0));
-    //radius*cos, angle/rad, radius*sin
     model = glm::translate(model, glm::vec3(cos(m_angle) * m_radius, 0, sin(m_angle) * m_radius));
     model = glm::rotate(model, glm::radians(90.0f), glm::vec3(0.0, 1.0, 0));
     model = glm::rotate(model, -m_angle, glm::vec3(0.0, 1.0, 0));
-    model = glm::scale(model, glm::vec3(0.003f));
+    model = glm::scale(model, glm::vec3(0.03f));
     shader->set_mat4("model", model);
     da_vinci->draw(shader);
 }
@@ -193,8 +191,6 @@ void MainController::update() {
     auto platform = engine::core::Controller::get<engine::platform::PlatformController>();
     float dt = platform->dt();
     m_angle += dt;
-
-    //auto platform = engine::core::Controller::get<engine::platform::PlatformController>();
     if (platform->key(engine::platform::KEY_L).state() == engine::platform::Key::State::JustPressed) { m_lamps_enabled = !m_lamps_enabled; }
     if (platform->key(engine::platform::KEY_F).state() == engine::platform::Key::State::JustPressed) {
         m_timer_started = true;
@@ -203,7 +199,7 @@ void MainController::update() {
     if (m_timer_started) {
         m_timer += dt;
         if (m_timer >= 2.0f && m_timer < 8.0f) { m_da_vinci_enabled = true; }
-        if (m_timer >= 8.0f) {
+        if (m_timer >= 80.0f) {
             m_da_vinci_enabled = false;
             m_timer_started = false;
         }
@@ -214,8 +210,8 @@ void MainController::draw() {
     draw_castle();
     draw_grass();
     draw_lamps();
-    draw_knight();
     draw_davinci();
+    draw_knight();
     draw_skybox();
 }
 

@@ -29,7 +29,7 @@ void GuiController::draw() {
         ImGui::SetNextWindowSize(ImVec2(400,200), ImGuiCond_Always);
         ImGui::Begin("Instructions");
         ImGui::Text("Press L to turn off/on the lights\n");
-        ImGui::ColorEdit3("Point light color", &mainController->lamp_color.b);
+        ImGui::ColorEdit3("Point light color", &mainController->lamp_color.r);
         ImGui::Text("Press F to see da vincis flying machine fly\n");
         ImGui::Text("Press C to remove colors from the screen\n");
         ImGui::End();

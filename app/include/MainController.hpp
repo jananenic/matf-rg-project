@@ -53,7 +53,6 @@ private:
     float m_lamp_strength = 1.0f;
     float m_angle = 0.0f;
     bool m_da_vinci_enabled = false;
-    float m_speed = 1.0f;
     float m_timer;
     float m_radius = 4.0f;
     bool m_timer_started;
