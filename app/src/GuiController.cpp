@@ -24,12 +24,12 @@ void GuiController::draw() {
     auto camera = graphics->camera();
     graphics->begin_gui();
 
-    auto mainController = engine::core::Controller::get<MainController>();
-    if(mainController) {
-        ImGui::SetNextWindowSize(ImVec2(400,200), ImGuiCond_Always);
+    auto main_controller = engine::core::Controller::get<MainController>();
+    if (main_controller) {
+        ImGui::SetNextWindowSize(ImVec2(400, 200), ImGuiCond_Always);
         ImGui::Begin("Instructions");
         ImGui::Text("Press L to turn off/on the lights\n");
-        ImGui::ColorEdit3("Point light color", &mainController->lamp_color.b);
+        ImGui::ColorEdit3("Point light color", &main_controller->lamp_color.r);
         ImGui::Text("Press F to see da vincis flying machine fly\n");
         ImGui::Text("Press C to remove colors from the screen\n");
         ImGui::End();

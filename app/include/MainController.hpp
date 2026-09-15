@@ -41,8 +41,6 @@ public:
     glm::vec3 lamp_color = glm::vec3(0.93f, 0.6f, 0.7f);
 
 
-
-
 private:
     std::vector<glm::vec3> m_lamp_positions = {
             glm::vec3(0.0f, -1.5f, -4.8f),
@@ -53,7 +51,6 @@ private:
     float m_lamp_strength = 1.0f;
     float m_angle = 0.0f;
     bool m_da_vinci_enabled = false;
-    float m_speed = 1.0f;
     float m_timer;
     float m_radius = 4.0f;
     bool m_timer_started;
