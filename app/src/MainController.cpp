@@ -198,7 +198,7 @@ void MainController::update() {
     if (m_timer_started) {
         m_timer += dt;
         if (m_timer >= 2.0f && m_timer < 8.0f) { m_da_vinci_enabled = true; }
-        if (m_timer >= 80.0f) {
+        if (m_timer >= 8.0f) {
             m_da_vinci_enabled = false;
             m_timer_started = false;
         }

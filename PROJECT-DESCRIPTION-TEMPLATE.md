@@ -5,7 +5,7 @@ Interactive 3D scene of a knight guarding the castle. The scene features lamps w
 
 ## Controls
 
-Press W -> Camera moves foreward  
+Press W -> Camera moves forward  
 Press S -> Camera moves backward
 Press A -> Camera moves left
 Press D -> Camera moves right
@@ -23,7 +23,7 @@ Move the mouse -> Rotate camera
 
 [x] Model with lighting
 [x] Two types of lighting with customizable colors and movement through GUI or ACTIONS
-[x] Press F --- AFTER 2 SECONDS------> da Vinci's flying machine appears ---> AFTER 6 SECONDS-----> da Vinci's flying machine dissappears
+[x] Press F --- AFTER 2 SECONDS------> da Vinci's flying machine appears ---> AFTER 6 SECONDS-----> da Vinci's flying machine disappears
 
 ### Group A:
 
@@ -38,8 +38,7 @@ Move the mouse -> Rotate camera
 [ ] SSAO
 
 ### Engine improvement:
-
-[ ] ...
+[ ] 
 
 ## Models:
 
