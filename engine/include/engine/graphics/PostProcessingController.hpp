@@ -26,7 +26,7 @@ protected:
 
     void begin_draw() override;
 
-    void present(const resources::Shader *shader) const;//ime
+    void present(const resources::Shader *shader) const;
 
     void terminate() override;
 
