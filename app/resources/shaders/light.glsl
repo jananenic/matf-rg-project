@@ -40,7 +40,7 @@ struct DirLight {
     vec3 diffuse;
     vec3 specular;
 };
-
+/*
 struct PointLight {
     float constant;
     float linear;
@@ -50,7 +50,7 @@ struct PointLight {
     vec3 diffuse;
     vec3 specular;
 };
-
+*/
 
 
 in vec3 FragPos;
@@ -61,7 +61,7 @@ uniform vec3 viewPos;
 uniform Material material;
 uniform DirLight dirLight;
 uniform sampler2D texture_diffuse1;
-uniform PointLight pointLight;
+//uniform PointLight pointLight;
 
 uniform bool light_enabled;
 uniform vec3 lightPos;
@@ -74,7 +74,38 @@ uniform vec3 ambient;
 uniform vec3 diffuse;
 uniform vec3 specular;
 
-//vec3 CalcPointLight(PointLight light, vec3 normal, vec3 fragPos, vec3 viewDir, vec3 color);
+uniform samplerCube depthMap;
+uniform float far_plane;
+uniform bool shadows;
+
+vec3 sampleOffsetDirections[20] = vec3[](
+vec3(1, 1, 1), vec3(1, -1, 1), vec3(-1, -1, 1), vec3(-1, 1, 1),
+vec3(1, 1, -1), vec3(1, -1, -1), vec3(-1, -1, -1), vec3(-1, 1, -1),
+vec3(1, 1, 0), vec3(1, -1, 0), vec3(-1, -1, 0), vec3(-1, 1, 0),
+vec3(1, 0, 1), vec3(-1, 0, 1), vec3(1, 0, -1), vec3(-1, 0, -1),
+vec3(0, 1, 1), vec3(0, -1, 1), vec3(0, -1, -1), vec3(0, 1, -1)
+);
+
+float ShadowCalc(vec3 fragPos){
+    vec3 fragToLight = fragPos - lightPos;
+    float currentDepth = length(fragToLight);
+
+    float shadow = 0.0;
+    float bias = 0.15;  //0.005
+    int samples = 20;
+
+    float viewDist = length(viewPos - fragPos);
+    float diskRadius = (0.1 + (viewDist / far_plane)) / 25.0;
+
+    for(int i = 0; i < samples; ++i){
+        float closestDept = texture(depthMap, fragToLight + sampleOffsetDirections[i] * diskRadius).r;
+        closestDept *= far_plane;
+        if(currentDepth - bias > closestDept)
+        shadow += 1.0;
+    }
+    shadow /= float(samples);
+    return shadow;
+}
 
 vec3 CalcDirLight(DirLight light, vec3 normal, vec3 viewDir, vec3 color) {
     vec3 lightDir = normalize(-light.direction);
