@@ -8,6 +8,7 @@
 #include <engine/resources/Skybox.hpp>
 #include <imgui_impl_glfw.h>
 #include <imgui_impl_opengl3.h>
+#include <engine/graphics/PointShadows.hpp>
 
 namespace engine::graphics {
 
@@ -29,6 +30,8 @@ void GraphicsController::initialize() {
     m_ortho_params.Near = 0.1f;
     m_ortho_params.Far = 100.0f;
 
+    m_point_shadows.initialize();
+
     platform->register_platform_event_observer(std::make_unique<GraphicsPlatformEventObserver>(this));
     CHECKED_GL_CALL(glViewport, 0, 0, platform->window()->width(), platform->window()->height());
 
@@ -46,6 +49,7 @@ void GraphicsController::terminate() {
         ImGui_ImplGlfw_Shutdown();
         ImGui::DestroyContext();
     }
+    m_point_shadows.terminate();
 }
 
 void GraphicsPlatformEventObserver::on_window_resize(int width, int height) {

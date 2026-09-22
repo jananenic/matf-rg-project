@@ -12,6 +12,7 @@ class MainController : public engine::core::Controller {
     bool loop() override;
 
     void begin_draw() override;
+    void render_depth(engine::resources::Shader *shader);
 
     void set_shader_uniforms(engine::resources::Shader *shader);
 

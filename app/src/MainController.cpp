@@ -40,6 +40,54 @@ bool MainController::loop() {
 
 void MainController::begin_draw() { engine::graphics::OpenGL::clear_buffers(); }
 
+
+void MainController::render_depth(engine::resources::Shader *shader) {
+    auto resources = engine::core::Controller::get<engine::resources::ResourcesController>();
+
+    shader->use();
+    //grass
+    glm::mat4 model = glm::mat4(1.0f);
+    model = glm::translate(model, glm::vec3(0.0f, -4.45f, -10.0f));
+    model = glm::rotate(model,glm::radians(-90.0f),glm::vec3(1.0,0.0,0.0));
+    model = glm::scale(model, glm::vec3(0.3f));
+    shader->set_mat4("model", model);
+    resources->model("grass")->draw(shader);
+
+    //castle
+    model = glm::mat4(1.0f);
+    model = glm::translate(model, glm::vec3(0.0f, -2.0f, -10.0f));
+    model = glm::rotate(model,glm::radians(-90.0f),glm::vec3(1.0,0.0,0.0));
+    model = glm::rotate(model,glm::radians(-90.0f),glm::vec3(0.0,0.0,1.0));
+    model = glm::scale(model, glm::vec3(0.2f));
+    shader->set_mat4("model", model);
+    resources->model("castle")->draw(shader);
+
+    //lamp
+    model = glm::mat4(1.0f);
+    model = glm::translate(model, m_lamp_positions[0]);
+    model = glm::rotate(model,glm::radians(-90.0f),glm::vec3(0.0,1.0,0.0));
+    model = glm::scale(model, glm::vec3(0.03f));
+    shader->set_mat4("model", model);
+    resources->model("lamp")->draw(shader);
+
+    model = glm::mat4(1.0f);
+    model = glm::translate(model, m_lamp_positions[1]);
+    model = glm::rotate(model,glm::radians(90.0f),glm::vec3(0.0,1.0,0.0));
+    model = glm::scale(model, glm::vec3(0.03f));
+    shader->set_mat4("model", model);
+    resources->model("lamp")->draw(shader);
+
+    //knight
+    model = glm::mat4(1.0f);
+    model = glm::translate(model, glm::vec3(-0.45f, -2.1f, -5.3f));
+    model = glm::rotate(model, glm::radians(180.0f), glm::vec3(0.0, 1.0, 0.0));
+    model = glm::scale(model, glm::vec3(1.2f));
+    shader->set_mat4("model", model);
+    resources->model("knight")->draw(shader);
+
+
+}
+
 void MainController::set_shader_uniforms(engine::resources::Shader *shader) {
     auto graphics = engine::core::Controller::get<engine::graphics::GraphicsController>();
 
@@ -63,6 +111,11 @@ void MainController::set_shader_uniforms(engine::resources::Shader *shader) {
     shader->set_vec3("diffuse", lamp_color * m_lamp_strength);
     shader->set_vec3("specular", lamp_color * 0.15f * lamp_color);
     shader->set_bool("light_enabled", m_lamps_enabled);
+
+    shader->set_int("depthMap", 10);
+    graphics->point_shadow()->bind_depth_map(10);
+    shader->set_float("far_plane", graphics->point_shadow()->far_plane());
+    shader->set_bool("shadows",m_lamps_enabled);
 }
 
 void MainController::draw_castle() {
@@ -206,6 +259,21 @@ void MainController::update() {
 }
 
 void MainController::draw() {
+
+    auto resources = engine::core::Controller::get<engine::resources::ResourcesController>();
+    auto graphics = engine::core::Controller::get<engine::graphics::GraphicsController>();
+    auto platform = engine::core::Controller::get<engine::platform::PlatformController>();
+
+    auto depthShader = resources->shader("point_shadows");
+    if(depthShader) {
+        graphics->point_shadow()->begin(m_light_pos, depthShader);
+        render_depth(depthShader);
+        int screenWidth = platform->window()->width();
+        int screenHeight = platform->window()->height();
+        graphics->point_shadow()->end(screenWidth, screenHeight);
+
+
+    }
     draw_castle();
     draw_grass();
     draw_lamps();
