@@ -24,7 +24,6 @@ void main() {
 #version 330 core
 
 out vec4 FragColor;
-#define BR 2
 struct Material {
     sampler2D tex;
     float ambient;
@@ -40,18 +39,6 @@ struct DirLight {
     vec3 diffuse;
     vec3 specular;
 };
-/*
-struct PointLight {
-    float constant;
-    float linear;
-    float quadratic;
-
-    vec3 ambient;
-    vec3 diffuse;
-    vec3 specular;
-};
-*/
-
 
 in vec3 FragPos;
 in vec3 Normal;
@@ -61,7 +48,6 @@ uniform vec3 viewPos;
 uniform Material material;
 uniform DirLight dirLight;
 uniform sampler2D texture_diffuse1;
-//uniform PointLight pointLight;
 
 uniform bool light_enabled;
 uniform vec3 lightPos;
@@ -70,9 +56,9 @@ uniform float constant;
 uniform float linear;
 uniform float quadratic;
 
-uniform vec3 ambient;
-uniform vec3 diffuse;
-uniform vec3 specular;
+uniform vec3 ambientPoint;
+uniform vec3 diffusePoint;
+uniform vec3 specularPoint;
 
 uniform samplerCube depthMap;
 uniform float far_plane;
@@ -122,7 +108,7 @@ vec3 CalcDirLight(DirLight light, vec3 normal, vec3 viewDir, vec3 color) {
     return (ambient + diffuse + specular);
 }
 
-vec3 CalcPointLight( vec3 normal, vec3 fragPos, vec3 viewDir, vec3 color) {
+vec3 CalcPointLight( vec3 normal, vec3 fragPos, vec3 viewDir, vec3 color, float shadow) {
     vec3 lightDir = normalize(lightPos - fragPos);
 
     float diff = max(dot(normal, lightDir), 0.0);
@@ -133,13 +119,13 @@ vec3 CalcPointLight( vec3 normal, vec3 fragPos, vec3 viewDir, vec3 color) {
     float distance = length(lightPos - fragPos);
     float attenuation = 1.0 / (constant + linear * distance + quadratic * (distance * distance));
 
-    vec3 ambient = ambient * color;
-    vec3 diffuse = diffuse * diff * color;
-    vec3 specular = specular * spec;
+    vec3 ambient = ambientPoint * color;
+    vec3 diffuse = diffusePoint * diff * color;
+    vec3 specular = specularPoint * spec;
 
     ambient *= attenuation;
-    diffuse *= attenuation;
-    specular *= attenuation;
+    diffuse *= attenuation * (1 -shadow);
+    specular *= attenuation * (1 -shadow);
     return (ambient + diffuse + specular);
 }
 
@@ -148,11 +134,12 @@ void main()
     vec3 color = texture(texture_diffuse1, TexCoords).rgb;
     vec3 norm = normalize(Normal);
     vec3 viewDir = normalize(viewPos - FragPos);
-
-    vec3 result = CalcDirLight(dirLight, norm, viewDir, color);
+    vec3 result = vec3(0.0);
+    result += CalcDirLight(dirLight, norm, viewDir, color);
 
     if (light_enabled) {
-        result += CalcPointLight( norm, FragPos, viewDir, color);
+        float shadow = ShadowCalc(FragPos);
+        result += CalcPointLight(norm, FragPos, viewDir, color, shadow);
     }
     FragColor = vec4(result, 1.0);
 }

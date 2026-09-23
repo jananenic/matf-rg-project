@@ -30,6 +30,7 @@ public:
 
 private:
     unsigned int m_shadow_fbo = 0;
+    int  m_previous_fbo = 0;
     unsigned int m_depth_cubemap = 0;
     unsigned int m_shadow_width = 1024;
     unsigned int m_shadow_height = 1024;

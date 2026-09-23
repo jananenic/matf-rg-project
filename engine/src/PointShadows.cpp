@@ -38,7 +38,8 @@ void PointShadows::initialize(unsigned int shadow_width, unsigned int shadow_hei
 
 void PointShadows::begin(const glm::vec3& light_pos,  engine::resources::Shader *depth_shader) {
 
-    //initialize();
+    glGetIntegerv(GL_FRAMEBUFFER_BINDING, &m_previous_fbo); // zapamti trenutno fbo
+
     glViewport(0, 0, m_shadow_width, m_shadow_height);
     glBindFramebuffer(GL_FRAMEBUFFER, m_shadow_fbo);
     glClear(GL_DEPTH_BUFFER_BIT);
@@ -68,7 +69,7 @@ void PointShadows::begin(const glm::vec3& light_pos,  engine::resources::Shader 
 }
 
 void PointShadows::end(int screen_width, int screen_height) {
-    glBindFramebuffer(GL_FRAMEBUFFER,0);
+    glBindFramebuffer(GL_FRAMEBUFFER,m_previous_fbo);
     glViewport(0, 0, screen_width, screen_height);
 }
 
